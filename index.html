@@ -204,10 +204,10 @@
         label.style.display = 'block';
         label.style.marginBottom = '8px';
 
-        label.textContent = Tipo da caixa ${i}: ;
+        label.textContent = `Tipo da caixa ${i}: `;
 
         const select = document.createElement('select');
-        select.name = tipoCaixa${i};
+        select.name = `tipoCaixa${i}`;
         select.required = true;
 
         const optionPadrao = document.createElement('option');
@@ -254,8 +254,8 @@
         return;
       }
 
-      let msg = Novo pedido (${tipoClienteSelecionado === "atacado" ? "ATACADO" : "CONSUMIDOR FINAL"}):\n;
-      msg += Nome: ${nome}\nCPF: ${cpf}\nCEP: ${cep}\nBairro: ${bairro}\nRua: ${rua}\nComplemento: ${complemento}\n;
+      let msg = `Novo pedido (${tipoClienteSelecionado === "atacado" ? "ATACADO" : "CONSUMIDOR FINAL"}):\n`;
+      msg += `Nome: ${nome}\nCPF: ${cpf}\nCEP: ${cep}\nBairro: ${bairro}\nRua: ${rua}\nComplemento: ${complemento}\n`;
 
       if (tipoClienteSelecionado === 'consumidor') {
         const qtdCaixas = parseInt(this.qtdCaixas.value);
@@ -263,15 +263,15 @@
           alert("Por favor, selecione a quantidade de caixas entre 1 e 5.");
           return;
         }
-        msg += Quantidade de caixas: ${qtdCaixas}\n;
+        msg += `Quantidade de caixas: ${qtdCaixas}\n`;
 
         for(let i = 1; i <= qtdCaixas; i++) {
-          const tipoCaixa = this[tipoCaixa${i}].value;
+          const tipoCaixa = this[`tipoCaixa${i}`].value;
           if (!tipoCaixa) {
-            alert(Por favor, selecione o tipo da caixa ${i}.);
+            alert(`Por favor, selecione o tipo da caixa ${i}.`);
             return;
           }
-          msg += Caixa ${i}: ${tipoCaixa}\n;
+          msg += `Caixa ${i}: ${tipoCaixa}\n`;
         }
 
       } else if (tipoClienteSelecionado === 'atacado') {
@@ -287,11 +287,11 @@
             return;
           }
 
-          msg += Quantidade total de caixas (misturadas): ${total}\n;
-          msg += - Vinho Tinto Suave: ${tintoSuave}\n;
-          msg += - Vinho Tinto Seco: ${tintoSeco}\n;
-          msg += - Vinho Branco Suave: ${brancoSuave}\n;
-          msg += - Vinho Branco Seco: ${brancoSeco}\n;
+          msg += `Quantidade total de caixas (misturadas): ${total}\n`;
+          msg += `- Vinho Tinto Suave: ${tintoSuave}\n`;
+          msg += `- Vinho Tinto Seco: ${tintoSeco}\n`;
+          msg += `- Vinho Branco Suave: ${brancoSuave}\n`;
+          msg += `- Vinho Branco Seco: ${brancoSeco}\n`;
 
         } else {
           const caixasAtacado = parseInt(this.caixasAtacado.value);
@@ -299,11 +299,11 @@
             alert("A quantidade mínima para atacado é 5 caixas.");
             return;
           }
-          msg += Quantidade de caixas: ${caixasAtacado}\n;
+          msg += `Quantidade de caixas: ${caixasAtacado}\n`;
         }
       }
 
-      const url = https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)};
+      const url = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)}`;
       window.open(url, '_blank');
     });
   </script>
