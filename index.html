@@ -10,8 +10,33 @@
     <label>Nome: <input type="text" name="nome" required></label><br><br>
     <label>CPF: <input type="text" name="cpf" required></label><br><br>
     <label>CEP: <input type="text" name="cep" required></label><br><br>
-    <label>Quantidade: <input type="number" name="quantidade" required></label><br><br>
-    <label>WhatsApp: <input type="text" name="whatsapp" required></label><br><br>
+    
+    <fieldset>
+      <legend>Endereço</legend>
+      <label>Bairro: <input type="text" name="bairro" required></label><br><br>
+      <label>Rua: <input type="text" name="rua" required></label><br><br>
+      <label>Complemento: <input type="text" name="complemento"></label><br><br>
+    </fieldset>
+
+    <fieldset>
+      <legend>Vinhos</legend>
+      <label>Vinho de Mesa Tinto Suave (R$15,00): 
+        <input type="number" name="tintoSuave" min="0" value="0">
+      </label><br><br>
+
+      <label>Vinho de Mesa Tinto Seco (R$15,00): 
+        <input type="number" name="tintoSeco" min="0" value="0">
+      </label><br><br>
+
+      <label>Vinho de Mesa Branco Suave (R$15,00): 
+        <input type="number" name="brancoSuave" min="0" value="0">
+      </label><br><br>
+
+      <label>Vinho de Mesa Branco Seco (R$15,00): 
+        <input type="number" name="brancoSeco" min="0" value="0">
+      </label><br><br>
+    </fieldset>
+
     <button type="submit">Enviar pelo WhatsApp</button>
   </form>
 
@@ -21,12 +46,24 @@
       const nome = this.nome.value;
       const cpf = this.cpf.value;
       const cep = this.cep.value;
-      const quantidade = this.quantidade.value;
-      const whatsapp = this.whatsapp.value;
+      const bairro = this.bairro.value;
+      const rua = this.rua.value;
+      const complemento = this.complemento.value;
 
-      const numeroDestino = "5554996609798";
+      const tintoSuave = this.tintoSuave.value;
+      const tintoSeco = this.tintoSeco.value;
+      const brancoSuave = this.brancoSuave.value;
+      const brancoSeco = this.brancoSeco.value;
 
-      const msg = `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, quero ${quantidade} unidade(s). Meu WhatsApp: ${whatsapp}`;
+      const numeroDestino = "555409798";
+
+      const msg = `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento ${complemento}.
+Desejo realizar o seguinte pedido:
+- Vinho de Mesa Tinto Suave: ${tintoSuave} unidade(s)
+- Vinho de Mesa Tinto Seco: ${tintoSeco} unidade(s)
+- Vinho de Mesa Branco Suave: ${brancoSuave} unidade(s)
+- Vinho de Mesa Branco Seco: ${brancoSeco} unidade(s)`;
+
       const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(msg)}`;
       window.location.href = url;
     });
