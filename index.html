@@ -159,38 +159,38 @@
   </form>
 
   <script>
-    const tipoClienteRadios = document.querySelectorAll('input[name="tipoCliente"]');
-    const pedidoForm = document.getElementById('pedidoForm');
-    const consumidorFinalDiv = document.getElementById('consumidorFinalDiv');
-    const atacadoDiv = document.getElementById('atacadoDiv');
-    const misturarCheckbox = document.getElementById('misturar');
-    const vinhosMistura = document.getElementById('vinhosMistura');
-    const tiposCaixasContainer = document.getElementById('tiposCaixasContainer');
-    let tipoClienteSelecionado = "";
+const btnConsumidor = document.getElementById('btnConsumidor');
+const btnAtacado = document.getElementById('btnAtacado');
 
-    tipoClienteRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        tipoClienteSelecionado = radio.value;
-        pedidoForm.style.display = 'block';
+btnConsumidor.addEventListener('click', () => {
+  tipoClienteSelecionado = 'consumidor';
+  mostrarFormulario();
+});
 
-        // Reset campos e visibilidade
-        consumidorFinalDiv.classList.add('hidden');
-        atacadoDiv.classList.add('hidden');
-        vinhosMistura.classList.add('hidden');
-        misturarCheckbox.checked = false;
-        tiposCaixasContainer.innerHTML = '';
-        pedidoForm.reset();
+btnAtacado.addEventListener('click', () => {
+  tipoClienteSelecionado = 'atacado';
+  mostrarFormulario();
+});
 
-        if (tipoClienteSelecionado === 'consumidor') {
-          consumidorFinalDiv.classList.remove('hidden');
-        } else if (tipoClienteSelecionado === 'atacado') {
-          atacadoDiv.classList.remove('hidden');
-        }
+function mostrarFormulario() {
+  pedidoForm.style.display = 'block';
 
-        // Scroll para o formulário
-        pedidoForm.scrollIntoView({ behavior: 'smooth' });
-      });
-    });
+  consumidorFinalDiv.classList.add('hidden');
+  atacadoDiv.classList.add('hidden');
+  vinhosMistura.classList.add('hidden');
+  misturarCheckbox.checked = false;
+  tiposCaixasContainer.innerHTML = '';
+  pedidoForm.reset();
+
+  if (tipoClienteSelecionado === 'consumidor') {
+    consumidorFinalDiv.classList.remove('hidden');
+  } else if (tipoClienteSelecionado === 'atacado') {
+    atacadoDiv.classList.remove('hidden');
+  }
+
+  pedidoForm.scrollIntoView({ behavior: 'smooth' });
+}
+
 
     // Controla criação dos selects dos tipos de vinho para consumidor final
     document.getElementById('qtdCaixas').addEventListener('change', function() {
