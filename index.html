@@ -72,10 +72,11 @@
     Pedido mínimo: 1 caixa (contém 12 garrafas).
   </div>
 
-  <div style="margin-bottom: 20px;">
-    <label><input type="radio" name="tipoCliente" value="consumidor" /> Consumidor Final</label>
-    <label><input type="radio" name="tipoCliente" value="atacado" /> Atacado (acima de 5 caixas)</label>
+  <div id="selecaoCliente" style="margin-bottom: 20px; display: flex; gap: 10px;">
+    <button type="button" id="btnConsumidor" style="flex:1;">Consumidor Final</button>
+    <button type="button" id="btnAtacado" style="flex:1;">Atacado (acima de 5 caixas)</button>
   </div>
+
 
   <form id="pedidoForm" style="display:none;">
 
