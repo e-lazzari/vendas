@@ -1,252 +1,242 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Formulário de Pedido</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      max-width: 600px;
-    }
-    label {
-      display: block;
-      margin-bottom: 12px;
-    }
-    select, input[type="text"], input[type="number"] {
-      padding: 6px;
-      font-size: 1em;
-      width: 100%;
-      max-width: 300px;
-      box-sizing: border-box;
-      margin-top: 4px;
-    }
-    #selecoesCaixas label {
-      margin-top: 10px;
-    }
-    .hidden {
-      display: none;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1.1em;
-      cursor: pointer;
-    }
-    .mensagem {
-      margin-bottom: 20px;
-      background: #f0f8ff;
-      border-left: 5px solid #007bff;
-      padding: 10px 15px;
-      color: #004085;
-    }
-    .opcoes {
-      margin-bottom: 20px;
-    }
-    .opcoes label {
-      display: inline-block;
-      margin-right: 20px;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Formulário de Pedido</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    max-width: 600px;
+  }
+  label {
+    display: block;
+    margin-bottom: 12px;
+  }
+  select, input[type="text"], input[type="number"] {
+    padding: 6px;
+    font-size: 1em;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    margin-top: 4px;
+  }
+  #selecoesCaixas label {
+    margin-top: 8px;
+  }
+  .hidden {
+    display: none;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+  }
+  .mensagem {
+    margin-bottom: 20px;
+    background: #f0f8ff;
+    border-left: 5px solid #007bff;
+    padding: 10px 15px;
+    color: #004085;
+  }
+  .opcoes {
+    margin-bottom: 20px;
+  }
+  .opcoes label {
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: bold;
+  }
+</style>
 </head>
 <body>
-  <h2>Formulário de Pedido</h2>
 
-  <div class="mensagem">
-    <p>Olá! Seja bem-vindo(a). Nosso pedido mínimo é de 1 caixa, que contém 12 garrafas.</p>
+<h2>Formulário de Pedido</h2>
+
+<div class="mensagem">
+  <p>Olá! Seja bem-vindo(a). Nosso pedido mínimo é de 1 caixa, que contém 12 garrafas.</p>
+</div>
+
+<form id="pedidoForm">
+
+  <div class="opcoes">
+    <label><input type="radio" name="tipoCliente" value="consumidor" required /> Consumidor Final</label>
+    <label><input type="radio" name="tipoCliente" value="atacado" /> Atacado (mais de 5 caixas)</label>
   </div>
 
-  <form id="pedidoForm">
+  <div id="formConsumidor" class="hidden">
+    <label>Nome: <input type="text" name="nome" required /></label>
+    <label>CPF: <input type="text" name="cpf" required /></label>
+    <label>CEP: <input type="text" name="cep" required /></label>
 
-    <div class="opcoes">
+    <fieldset style="border: 1px solid #ccc; padding: 10px; max-width: 500px;">
+      <legend>Endereço</legend>
+      <label>Bairro: <input type="text" name="bairro" required /></label>
+      <label>Rua: <input type="text" name="rua" required /></label>
+      <label>Complemento: <input type="text" name="complemento" /></label>
+    </fieldset>
+
+    <div id="caixasInteiras" style="margin-top: 15px;">
       <label>
-        <input type="radio" name="tipoCliente" value="consumidor" required />
-        Consumidor Final
+        Quantidade de caixas:
+        <select id="quantidadeCaixas" name="caixas" required>
+          <option value="1">1 caixa</option>
+          <option value="2">2 caixas</option>
+          <option value="3">3 caixas</option>
+          <option value="4">4 caixas</option>
+          <option value="5">5 caixas</option>
+        </select>
       </label>
-      <label>
-        <input type="radio" name="tipoCliente" value="atacado" />
-        Atacado (mais de 5 caixas)
-      </label>
+      <div id="selecoesCaixas"></div>
     </div>
+  </div>
 
-    <div id="formConsumidor" class="hidden">
-      <label>Nome: <input type="text" name="nome" required /></label>
-      <label>CPF: <input type="text" name="cpf" required /></label>
-      <label>CEP: <input type="text" name="cep" required /></label>
+  <div id="formAtacado" class="hidden">
+    <label>Nome: <input type="text" name="nomeAtacado" /></label>
+    <label>CPF/CNPJ: <input type="text" name="cpfCnpjAtacado" /></label>
+    <label>CEP: <input type="text" name="cepAtacado" /></label>
 
-      <fieldset style="border: 1px solid #ccc; padding: 10px; max-width: 500px;">
-        <legend>Endereço</legend>
-        <label>Bairro: <input type="text" name="bairro" required /></label>
-        <label>Rua: <input type="text" name="rua" required /></label>
-        <label>Complemento: <input type="text" name="complemento" /></label>
-      </fieldset>
+    <fieldset style="border: 1px solid #ccc; padding: 10px; max-width: 500px;">
+      <legend>Endereço</legend>
+      <label>Bairro: <input type="text" name="bairroAtacado" /></label>
+      <label>Rua: <input type="text" name="ruaAtacado" /></label>
+      <label>Complemento: <input type="text" name="complementoAtacado" /></label>
+    </fieldset>
 
-      <div id="caixasInteiras" style="margin-top: 15px;">
-        <label>
-          Quantidade de caixas:
-          <select id="quantidadeCaixas" name="caixas" required>
-            <option value="1">1 caixa</option>
-            <option value="2">2 caixas</option>
-            <option value="3">3 caixas</option>
-            <option value="4">4 caixas</option>
-            <option value="5">5 caixas</option>
-          </select>
-        </label>
-        <div id="selecoesCaixas"></div>
-      </div>
-    </div>
+    <label>Quantidade de caixas (mínimo 6): <input type="number" name="quantidadeAtacado" min="6" /></label>
+  </div>
 
-    <div id="formAtacado" class="hidden">
-      <label>Nome: <input type="text" name="nomeAtacado" /></label>
-      <label>CPF/CNPJ: <input type="text" name="cpfCnpjAtacado" /></label>
-      <label>CEP: <input type="text" name="cepAtacado" /></label>
+  <button type="submit">Enviar pelo WhatsApp</button>
+</form>
 
-      <fieldset style="border: 1px solid #ccc; padding: 10px; max-width: 500px;">
-        <legend>Endereço</legend>
-        <label>Bairro: <input type="text" name="bairroAtacado" /></label>
-        <label>Rua: <input type="text" name="ruaAtacado" /></label>
-        <label>Complemento: <input type="text" name="complementoAtacado" /></label>
-      </fieldset>
+<script>
+  const tipoClienteRadios = document.querySelectorAll('input[name="tipoCliente"]');
+  const formConsumidor = document.getElementById("formConsumidor");
+  const formAtacado = document.getElementById("formAtacado");
 
-      <label>Quantidade de caixas (mínimo 6): <input type="number" name="quantidadeAtacado" min="6" /></label>
-    </div>
-
-    <button type="submit">Enviar pelo WhatsApp</button>
-  </form>
-
-  <script>
-    const tipoClienteRadios = document.querySelectorAll('input[name="tipoCliente"]');
-    const formConsumidor = document.getElementById("formConsumidor");
-    const formAtacado = document.getElementById("formAtacado");
-
-    tipoClienteRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "consumidor" && radio.checked) {
-          formConsumidor.classList.remove("hidden");
-          formAtacado.classList.add("hidden");
-          clearAtacadoFields();
-        } else if (radio.value === "atacado" && radio.checked) {
-          formAtacado.classList.remove("hidden");
-          formConsumidor.classList.add("hidden");
-          clearConsumidorFields();
-        }
-      });
-    });
-
-    function clearConsumidorFields() {
-      formConsumidor.querySelectorAll("input, select").forEach(el => {
-        if (el.type !== "radio") el.value = "";
-      });
-      document.getElementById("selecoesCaixas").innerHTML = "";
-    }
-    function clearAtacadoFields() {
-      formAtacado.querySelectorAll("input").forEach(el => {
-        el.value = "";
-      });
-    }
-
-    const quantidadeCaixas = document.getElementById("quantidadeCaixas");
-    const selecoesCaixas = document.getElementById("selecoesCaixas");
-
-    quantidadeCaixas.addEventListener("change", atualizarSelecoesCaixas);
-
-    // Cria os selects de tipos para cada caixa selecionada
-    function atualizarSelecoesCaixas() {
-      const qtd = parseInt(quantidadeCaixas.value);
-      selecoesCaixas.innerHTML = "";
-
-      const opcoes = ["TINTO SUAVE", "TINTO SECO", "BRANCO SUAVE", "BRANCO SECO"];
-
-      for (let i = 1; i <= qtd; i++) {
-        const label = document.createElement("label");
-        label.style.display = "block";
-        label.style.marginTop = "8px";
-        label.innerText = `Tipo da caixa ${i}: `;
-
-        const select = document.createElement("select");
-        select.name = `tipoCaixa${i}`;
-        select.required = true;
-        select.style.marginTop = "4px";
-        select.style.width = "100%";
-        select.style.maxWidth = "300px";
-        select.style.padding = "6px";
-
-        opcoes.forEach(opcao => {
-          const option = document.createElement("option");
-          option.value = opcao;
-          option.textContent = opcao;
-          select.appendChild(option);
-        });
-
-        label.appendChild(select);
-        selecoesCaixas.appendChild(label);
+  tipoClienteRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "consumidor" && radio.checked) {
+        formConsumidor.classList.remove("hidden");
+        formAtacado.classList.add("hidden");
+        clearAtacadoFields();
+      } else if (radio.value === "atacado" && radio.checked) {
+        formAtacado.classList.remove("hidden");
+        formConsumidor.classList.add("hidden");
+        clearConsumidorFields();
       }
+    });
+  });
+
+  function clearConsumidorFields() {
+    formConsumidor.querySelectorAll("input, select").forEach(el => {
+      if (el.type !== "radio") el.value = "";
+    });
+    document.getElementById("selecoesCaixas").innerHTML = "";
+  }
+  function clearAtacadoFields() {
+    formAtacado.querySelectorAll("input").forEach(el => {
+      el.value = "";
+    });
+  }
+
+  const quantidadeCaixas = document.getElementById("quantidadeCaixas");
+  const selecoesCaixas = document.getElementById("selecoesCaixas");
+
+  quantidadeCaixas.addEventListener("change", atualizarSelecoesCaixas);
+
+  function atualizarSelecoesCaixas() {
+    const qtd = parseInt(quantidadeCaixas.value);
+    selecoesCaixas.innerHTML = "";
+
+    const opcoes = ["TINTO SUAVE", "TINTO SECO", "BRANCO SUAVE", "BRANCO SECO"];
+
+    for (let i = 1; i <= qtd; i++) {
+      const label = document.createElement("label");
+      label.style.display = "block";
+      label.style.marginTop = "8px";
+      label.innerText = `Tipo da caixa ${i}: `;
+
+      const select = document.createElement("select");
+      select.name = `tipoCaixa${i}`;
+      select.required = true;
+      select.style.marginTop = "4px";
+      select.style.width = "100%";
+      select.style.maxWidth = "300px";
+      select.style.padding = "6px";
+
+      opcoes.forEach(opcao => {
+        const option = document.createElement("option");
+        option.value = opcao;
+        option.textContent = opcao;
+        select.appendChild(option);
+      });
+
+      label.appendChild(select);
+      selecoesCaixas.appendChild(label);
     }
+  }
 
-    // Inicializa os selects para 1 caixa ao carregar
-    atualizarSelecoesCaixas();
+  atualizarSelecoesCaixas();
 
-    document.getElementById("pedidoForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+  document.getElementById("pedidoForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-      const tipoCliente = this.tipoCliente.value;
+    const tipoCliente = this.tipoCliente.value;
 
-      let msg = "";
+    let msg = "";
 
-      if (tipoCliente === "consumidor") {
-        const nome = this.nome.value.trim();
-        const cpf = this.cpf.value.trim();
-        const cep = this.cep.value.trim();
-        const bairro = this.bairro.value.trim();
-        const rua = this.rua.value.trim();
-        const complemento = this.complemento.value.trim();
+    if (tipoCliente === "consumidor") {
+      const nome = this.nome.value.trim();
+      const cpf = this.cpf.value.trim();
+      const cep = this.cep.value.trim();
+      const bairro = this.bairro.value.trim();
+      const rua = this.rua.value.trim();
+      const complemento = this.complemento.value.trim();
 
-        if (!nome || !cpf || !cep || !bairro || !rua) {
-          alert("Por favor, preencha todos os campos obrigatórios.");
-          return;
-        }
-
-        const caixas = parseInt(this.caixas.value);
-        if (isNaN(caixas) || caixas < 1 || caixas > 5) {
-          alert("Escolha entre 1 e 5 caixas.");
-          return;
-        }
-
-        msg += `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento: ${complemento || "N/A"}.\n`;
-        msg += `Pedido mínimo: 1 caixa com 12 garrafas.\n`;
-        msg += `Pedido de ${caixas} caixa(s):\n`;
-
-        for (let i = 1; i <= caixas; i++) {
-          const tipo = this[`tipoCaixa${i}`].value;
-          msg += `- Caixa ${i}: ${tipo}\n`;
-        }
-
-      } else if (tipoCliente === "atacado") {
-        const nome = this.nomeAtacado.value.trim();
-        const cpfCnpj = this.cpfCnpjAtacado.value.trim();
-        const cep = this.cepAtacado.value.trim();
-        const bairro = this.bairroAtacado.value.trim();
-        const rua = this.ruaAtacado.value.trim();
-        const complemento = this.complementoAtacado.value.trim();
-        const quantidadeAtacado = parseInt(this.quantidadeAtacado.value);
-
-        if (!nome || !cpfCnpj || !cep || !bairro || !rua || isNaN(quantidadeAtacado) || quantidadeAtacado < 6) {
-          alert("Por favor, preencha todos os campos obrigatórios corretamente. A quantidade mínima para atacado é 6 caixas.");
-          return;
-        }
-
-        msg += `Olá, meu nome é ${nome}, CPF/CNPJ: ${cpfCnpj}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento: ${complemento || "N/A"}.\n`;
-        msg += `Pedido para atacado de ${quantidadeAtacado} caixas.\n`;
-      } else {
-        alert("Selecione o tipo de cliente.");
+      if (!nome || !cpf || !cep || !bairro || !rua) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
         return;
       }
 
-      const numeroDestino = "555409798"; // Coloque o número correto aqui com DDD e sem símbolos
-      const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(msg)}`;
-      window.location.href = url;
-    });
-  </script>
+      const caixas = parseInt(this.caixas.value);
+      if (isNaN(caixas) || caixas < 1 || caixas > 5) {
+        alert("Escolha entre 1 e 5 caixas.");
+        return;
+      }
+
+      msg += `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento: ${complemento || "N/A"}.\n`;
+      msg += `Pedido mínimo: 1 caixa com 12 garrafas.\n`;
+      msg += `Pedido de ${caixas} caixa(s):\n`;
+
+      for (let i = 1; i <= caixas; i++) {
+        const tipo = this[`tipoCaixa${i}`].value;
+        msg += `- Caixa ${i}: ${tipo}\n`;
+      }
+
+    } else if (tipoCliente === "atacado") {
+      const nome = this.nomeAtacado.value.trim();
+      const cpfCnpj = this.cpfCnpjAtacado.value.trim();
+      const cep = this.cepAtacado.value.trim();
+      const bairro = this.bairroAtacado.value.trim();
+      const rua = this.ruaAtacado.value.trim();
+      const complemento = this.complementoAtacado.value.trim();
+      const quantidadeAtacado = parseInt(this.quantidadeAtacado.value);
+
+      if (!nome || !cpfCnpj || !cep || !bairro || !rua || isNaN(quantidadeAtacado) || quantidadeAtacado < 6) {
+        alert("Por favor, preencha todos os campos obrigatórios corretamente. A quantidade mínima para atacado é 6 caixas.");
+        return;
+      }
+
+      msg += `Olá, meu nome é ${nome}, CPF/CNPJ: ${cpfCnpj}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento: ${complemento || "N/A"}.\n`;
+      msg += `Pedido atacado com ${quantidadeAtacado} caixas.\n`;
+    }
+
+    const url = `https://api.whatsapp.com/send?phone=YOURNUMBER&text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank");
+  });
+</script>
+
 </body>
 </html>
