@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Formulário de Pedido</title>
+  <style>
+    .vinhos-mistura {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
   <h2>Formulário de Pedido</h2>
@@ -10,7 +18,7 @@
     <label>Nome: <input type="text" name="nome" required></label><br><br>
     <label>CPF: <input type="text" name="cpf" required></label><br><br>
     <label>CEP: <input type="text" name="cep" required></label><br><br>
-    
+
     <fieldset>
       <legend>Endereço</legend>
       <label>Bairro: <input type="text" name="bairro" required></label><br><br>
@@ -18,29 +26,57 @@
       <label>Complemento: <input type="text" name="complemento"></label><br><br>
     </fieldset>
 
-    <fieldset>
-      <legend>Vinhos</legend>
-      <label>Vinho de Mesa Tinto Suave (R$15,00): 
-        <input type="number" name="tintoSuave" min="0" value="0">
-      </label><br><br>
+    <br>
+    <label>
+      <input type="checkbox" id="misturar" name="misturar">
+      Quero misturar os vinhos
+    </label><br><br>
 
-      <label>Vinho de Mesa Tinto Seco (R$15,00): 
-        <input type="number" name="tintoSeco" min="0" value="0">
-      </label><br><br>
+    <div id="vinhosMistura" class="vinhos-mistura">
+      <fieldset>
+        <legend>Escolha a quantidade de cada tipo (múltiplos de 12 no total)</legend>
+        <label>Vinho de Mesa Tinto Suave (R$15,00): 
+          <input type="number" name="tintoSuave" min="0" value="0">
+        </label><br><br>
 
-      <label>Vinho de Mesa Branco Suave (R$15,00): 
-        <input type="number" name="brancoSuave" min="0" value="0">
-      </label><br><br>
+        <label>Vinho de Mesa Tinto Seco (R$15,00): 
+          <input type="number" name="tintoSeco" min="0" value="0">
+        </label><br><br>
 
-      <label>Vinho de Mesa Branco Seco (R$15,00): 
-        <input type="number" name="brancoSeco" min="0" value="0">
+        <label>Vinho de Mesa Branco Suave (R$15,00): 
+          <input type="number" name="brancoSuave" min="0" value="0">
+        </label><br><br>
+
+        <label>Vinho de Mesa Branco Seco (R$15,00): 
+          <input type="number" name="brancoSeco" min="0" value="0">
+        </label><br><br>
+      </fieldset>
+    </div>
+
+    <div id="caixasInteiras">
+      <label>Quantidade de caixas (12 unidades cada): 
+        <input type="number" name="caixas" min="1" value="1">
       </label><br><br>
-    </fieldset>
+    </div>
 
     <button type="submit">Enviar pelo WhatsApp</button>
   </form>
 
   <script>
+    const misturarCheckbox = document.getElementById("misturar");
+    const vinhosDiv = document.getElementById("vinhosMistura");
+    const caixasDiv = document.getElementById("caixasInteiras");
+
+    misturarCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        vinhosDiv.style.display = "block";
+        caixasDiv.style.display = "none";
+      } else {
+        vinhosDiv.style.display = "none";
+        caixasDiv.style.display = "block";
+      }
+    });
+
     document.getElementById("pedidoForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const nome = this.nome.value;
@@ -49,20 +85,38 @@
       const bairro = this.bairro.value;
       const rua = this.rua.value;
       const complemento = this.complemento.value;
-
-      const tintoSuave = this.tintoSuave.value;
-      const tintoSeco = this.tintoSeco.value;
-      const brancoSuave = this.brancoSuave.value;
-      const brancoSeco = this.brancoSeco.value;
-
       const numeroDestino = "555409798";
 
-      const msg = `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento ${complemento}.
-Desejo realizar o seguinte pedido:
-- Vinho de Mesa Tinto Suave: ${tintoSuave} unidade(s)
-- Vinho de Mesa Tinto Seco: ${tintoSeco} unidade(s)
-- Vinho de Mesa Branco Suave: ${brancoSuave} unidade(s)
-- Vinho de Mesa Branco Seco: ${brancoSeco} unidade(s)`;
+      let msg = `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento ${complemento}.\n`;
+
+      if (misturarCheckbox.checked) {
+        const tintoSuave = parseInt(this.tintoSuave.value) || 0;
+        const tintoSeco = parseInt(this.tintoSeco.value) || 0;
+        const brancoSuave = parseInt(this.brancoSuave.value) || 0;
+        const brancoSeco = parseInt(this.brancoSeco.value) || 0;
+
+        const total = tintoSuave + tintoSeco + brancoSuave + brancoSeco;
+
+        if (total === 0 || total % 12 !== 0) {
+          alert("O total de garrafas deve ser múltiplo de 12.");
+          return;
+        }
+
+        msg += `Pedido com mistura de vinhos:\n`;
+        msg += `- Tinto Suave: ${tintoSuave} unidade(s)\n`;
+        msg += `- Tinto Seco: ${tintoSeco} unidade(s)\n`;
+        msg += `- Branco Suave: ${brancoSuave} unidade(s)\n`;
+        msg += `- Branco Seco: ${brancoSeco} unidade(s)\n`;
+        msg += `Total: ${total} garrafa(s)`;
+      } else {
+        const caixas = parseInt(this.caixas.value);
+        if (isNaN(caixas) || caixas < 1) {
+          alert("O pedido mínimo é de 1 caixa.");
+          return;
+        }
+        const total = caixas * 12;
+        msg += `Pedido de ${caixas} caixa(s), total de ${total} garrafa(s).`;
+      }
 
       const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(msg)}`;
       window.location.href = url;
