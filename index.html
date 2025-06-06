@@ -1,312 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Formulário de Pedido</title>
+  <meta charset="UTF-8">
+  <title>Pedido de Vinho</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 10px;
-      background: #f7f7f7;
-      border-radius: 8px;
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-    }
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-      color: #444;
-    }
-    input[type="text"],
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 3px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      font-size: 1em;
-    }
     button {
-      background-color: #25d366;
-      color: white;
-      font-weight: bold;
-      border: none;
-      padding: 12px 20px;
-      font-size: 1.1em;
-      border-radius: 6px;
+      margin: 5px;
+      padding: 10px 20px;
       cursor: pointer;
-      width: 100%;
     }
-    button:hover {
-      background-color: #1ebe57;
+    .active {
+      background-color: #4CAF50;
+      color: white;
     }
     .hidden {
       display: none;
     }
-    .info-msg {
-      background-color: #e1f3e9;
-      border-left: 5px solid #25d366;
-      padding: 10px;
-      margin-bottom: 20px;
-      color: #256d35;
-      font-size: 1em;
-      border-radius: 4px;
+    label, input {
+      display: block;
+      margin: 8px 0;
     }
   </style>
 </head>
 <body>
+  <h2>Escolha o tipo de cliente:</h2>
+  <button id="btnConsumidor">Consumidor Final</button>
+  <button id="btnAtacado">Atacado</button>
 
-  <h2>Formulário de Pedido</h2>
-
-  <div class="info-msg">
-    Olá! Bem-vindo ao nosso sistema de pedidos.<br>
-    Pedido mínimo: 1 caixa (contém 12 garrafas).
-  </div>
-
-  <div style="margin-bottom: 20px;">
-    <label><input type="radio" name="tipoCliente" value="consumidor" /> Consumidor Final</label>
-    <label><input type="radio" name="tipoCliente" value="atacado" /> Atacado (acima de 5 caixas)</label>
-  </div>
-
-  <form id="pedidoForm" style="display:none;">
-
-    <label>Nome:
-      <input type="text" name="nome" required />
-    </label>
-
-    <label>CPF:
-      <input type="text" name="cpf" required />
-    </label>
-
-    <label>CEP:
-      <input type="text" name="cep" required />
-    </label>
-
-    <label>Bairro:
-      <input type="text" name="bairro" required />
-    </label>
-
-    <label>Rua:
-      <input type="text" name="rua" required />
-    </label>
-
-    <label>Complemento:
-      <input type="text" name="complemento" />
-    </label>
-
-    <!-- Consumidor Final -->
-    <div id="consumidorFinalDiv" class="hidden">
-      <label>Quantidade de caixas (1 a 5):
-        <select id="qtdCaixas" name="qtdCaixas" required>
-          <option value="" disabled selected>Selecione</option>
-          <option value="1">1 caixa</option>
-          <option value="2">2 caixas</option>
-          <option value="3">3 caixas</option>
-          <option value="4">4 caixas</option>
-          <option value="5">5 caixas</option>
-        </select>
-      </label>
-
-      <div id="tiposCaixasContainer"></div>
+  <div id="formulario" class="hidden">
+    <div id="formConsumidor" class="hidden">
+      <label for="caixasConsumidor">Quantidade de caixas (mínimo 1):</label>
+      <input type="number" id="caixasConsumidor" min="1">
+      <label for="tipoVinho">Tipo de vinho:</label>
+      <select id="tipoVinho">
+        <option value="Tinto Suave">Tinto Suave</option>
+        <option value="Tinto Seco">Tinto Seco</option>
+        <option value="Branco Suave">Branco Suave</option>
+        <option value="Branco Seco">Branco Seco</option>
+      </select>
     </div>
 
-    <!-- Atacado -->
-    <div id="atacadoDiv" class="hidden">
-      <label>Quantidade de caixas (mínimo 5):
-        <input type="number" name="caixasAtacado" min="5" value="5" required />
-      </label>
-
-      <label style="display:block; margin-top:10px;">
-        <input type="checkbox" id="misturar" name="misturar" />
-        Quero misturar os vinhos
-      </label>
-
-      <div id="vinhosMistura" class="hidden" style="margin-top: 10px;">
-        <fieldset style="border:1px solid #ccc; padding:10px; border-radius:6px;">
-          <legend>Escolha a quantidade de cada tipo (múltiplos de 12)</legend>
-
-          <label>
-            Vinho Tinto Suave:
-            <input type="number" name="tintoSuave" min="0" value="0" />
-          </label>
-          <label>
-            Vinho Tinto Seco:
-            <input type="number" name="tintoSeco" min="0" value="0" />
-          </label>
-          <label>
-            Vinho Branco Suave:
-            <input type="number" name="brancoSuave" min="0" value="0" />
-          </label>
-          <label>
-            Vinho Branco Seco:
-            <input type="number" name="brancoSeco" min="0" value="0" />
-          </label>
-        </fieldset>
-      </div>
+    <div id="formAtacado" class="hidden">
+      <p><strong>Informe a quantidade desejada de caixas (acima de 5) para compra em atacado para melhor conseguir te atender:</strong></p>
+      <label for="caixasAtacado">Quantidade de caixas:</label>
+      <input type="number" id="caixasAtacado" min="5">
     </div>
 
-    <button type="submit">Enviar pelo WhatsApp</button>
-  </form>
+    <button id="enviarWhatsApp">Enviar pelo WhatsApp</button>
+  </div>
 
   <script>
-    const tipoClienteRadios = document.querySelectorAll('input[name="tipoCliente"]');
-    const pedidoForm = document.getElementById('pedidoForm');
-    const consumidorFinalDiv = document.getElementById('consumidorFinalDiv');
-    const atacadoDiv = document.getElementById('atacadoDiv');
-    const misturarCheckbox = document.getElementById('misturar');
-    const vinhosMistura = document.getElementById('vinhosMistura');
-    const tiposCaixasContainer = document.getElementById('tiposCaixasContainer');
-    let tipoClienteSelecionado = "";
+    const btnConsumidor = document.getElementById('btnConsumidor');
+    const btnAtacado = document.getElementById('btnAtacado');
+    const formConsumidor = document.getElementById('formConsumidor');
+    const formAtacado = document.getElementById('formAtacado');
+    const formulario = document.getElementById('formulario');
+    const enviarWhatsApp = document.getElementById('enviarWhatsApp');
 
-    tipoClienteRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        tipoClienteSelecionado = radio.value;
-        pedidoForm.style.display = 'block';
+    let tipoCliente = "";
 
-        // Reset campos e visibilidade
-        consumidorFinalDiv.classList.add('hidden');
-        atacadoDiv.classList.add('hidden');
-        vinhosMistura.classList.add('hidden');
-        misturarCheckbox.checked = false;
-        tiposCaixasContainer.innerHTML = '';
-        pedidoForm.reset();
-
-        if (tipoClienteSelecionado === 'consumidor') {
-          consumidorFinalDiv.classList.remove('hidden');
-        } else if (tipoClienteSelecionado === 'atacado') {
-          atacadoDiv.classList.remove('hidden');
-        }
-
-        // Scroll para o formulário
-        pedidoForm.scrollIntoView({ behavior: 'smooth' });
-      });
+    btnConsumidor.addEventListener('click', () => {
+      tipoCliente = "consumidor";
+      btnConsumidor.classList.add("active");
+      btnAtacado.classList.remove("active");
+      formulario.classList.remove("hidden");
+      formConsumidor.classList.remove("hidden");
+      formAtacado.classList.add("hidden");
     });
 
-    // Controla criação dos selects dos tipos de vinho para consumidor final
-    document.getElementById('qtdCaixas').addEventListener('change', function() {
-      const qtd = parseInt(this.value);
-      tiposCaixasContainer.innerHTML = ''; // limpa
-      if (!qtd || qtd < 1 || qtd > 5) return;
-
-      const opcoes = ['TINTO SUAVE', 'TINTO SECO', 'BRANCO SUAVE', 'BRANCO SECO'];
-
-      for(let i = 1; i <= qtd; i++) {
-        const label = document.createElement('label');
-        label.style.display = 'block';
-        label.style.marginBottom = '8px';
-
-        label.textContent = `Tipo da caixa ${i}: `;
-
-        const select = document.createElement('select');
-        select.name = `tipoCaixa${i}`;
-        select.required = true;
-
-        const optionPadrao = document.createElement('option');
-        optionPadrao.value = '';
-        optionPadrao.textContent = 'Selecione';
-        optionPadrao.disabled = true;
-        optionPadrao.selected = true;
-        select.appendChild(optionPadrao);
-
-        opcoes.forEach(opt => {
-          const option = document.createElement('option');
-          option.value = opt;
-          option.textContent = opt;
-          select.appendChild(option);
-        });
-
-        label.appendChild(select);
-        tiposCaixasContainer.appendChild(label);
-      }
+    btnAtacado.addEventListener('click', () => {
+      tipoCliente = "atacado";
+      btnAtacado.classList.add("active");
+      btnConsumidor.classList.remove("active");
+      formulario.classList.remove("hidden");
+      formAtacado.classList.remove("hidden");
+      formConsumidor.classList.add("hidden");
     });
 
-    // Mostrar ou ocultar campos de mistura no atacado
-    misturarCheckbox.addEventListener('change', () => {
-      if (misturarCheckbox.checked) {
-        vinhosMistura.classList.remove('hidden');
-      } else {
-        vinhosMistura.classList.add('hidden');
-      }
-    });
+    enviarWhatsApp.addEventListener('click', () => {
+      const numeroDestino = '5599999999999'; // Substitua pelo número correto
+      let msg = "Olá, gostaria de fazer um pedido de vinho!\n";
 
-    pedidoForm.addEventListener("submit", function(e) {
-      e.preventDefault();
+      if (tipoCliente === "consumidor") {
+        const caixas = parseInt(document.getElementById('caixasConsumidor').value);
+        const tipoVinho = document.getElementById('tipoVinho').value;
 
-      const nome = this.nome.value.trim();
-      const cpf = this.cpf.value.trim();
-      const cep = this.cep.value.trim();
-      const bairro = this.bairro.value.trim();
-      const rua = this.rua.value.trim();
-      const complemento = this.complemento.value.trim();
-      const numeroDestino = "555409798";
-
-      if (!tipoClienteSelecionado) {
-        alert("Por favor, selecione Consumidor Final ou Atacado.");
-        return;
-      }
-
-      let msg = `Novo pedido (${tipoClienteSelecionado === "atacado" ? "ATACADO" : "CONSUMIDOR FINAL"}):\n`;
-      msg += `Nome: ${nome}\nCPF: ${cpf}\nCEP: ${cep}\nBairro: ${bairro}\nRua: ${rua}\nComplemento: ${complemento}\n`;
-
-      if (tipoClienteSelecionado === 'consumidor') {
-        const qtdCaixas = parseInt(this.qtdCaixas.value);
-        if (!qtdCaixas || qtdCaixas < 1 || qtdCaixas > 5) {
-          alert("Por favor, selecione a quantidade de caixas entre 1 e 5.");
+        if (isNaN(caixas) || caixas < 1) {
+          alert("Para consumidor final, a quantidade mínima é 1 caixa.");
           return;
         }
-        msg += `Quantidade de caixas: ${qtdCaixas}\n`;
 
-        for(let i = 1; i <= qtdCaixas; i++) {
-          const tipoCaixa = this[`tipoCaixa${i}`].value;
-          if (!tipoCaixa) {
-            alert(`Por favor, selecione o tipo da caixa ${i}.`);
-            return;
-          }
-          msg += `Caixa ${i}: ${tipoCaixa}\n`;
+        msg += `Tipo de cliente: Consumidor Final\n`;
+        msg += `Quantidade de caixas: ${caixas}\n`;
+        msg += `Tipo de vinho: ${tipoVinho}\n`;
+
+      } else if (tipoCliente === "atacado") {
+        const caixasAtacado = parseInt(document.getElementById('caixasAtacado').value);
+
+        if (isNaN(caixasAtacado) || caixasAtacado < 5) {
+          alert("A quantidade mínima para atacado é 5 caixas.");
+          return;
         }
 
-      } else if (tipoClienteSelecionado === 'atacado') {
-        if (misturarCheckbox.checked) {
-          const tintoSuave = parseInt(this.tintoSuave.value) || 0;
-          const tintoSeco = parseInt(this.tintoSeco.value) || 0;
-          const brancoSuave = parseInt(this.brancoSuave.value) || 0;
-          const brancoSeco = parseInt(this.brancoSeco.value) || 0;
-
-          const total = tintoSuave + tintoSeco + brancoSuave + brancoSeco;
-          if (total < 5) {
-            alert("Quantidade total deve ser no mínimo 5 caixas.");
-            return;
-          }
-
-          msg += `Quantidade total de caixas (misturadas): ${total}\n`;
-          msg += `- Vinho Tinto Suave: ${tintoSuave}\n`;
-          msg += `- Vinho Tinto Seco: ${tintoSeco}\n`;
-          msg += `- Vinho Branco Suave: ${brancoSuave}\n`;
-          msg += `- Vinho Branco Seco: ${brancoSeco}\n`;
-
-        } else {
-          const caixasAtacado = parseInt(this.caixasAtacado.value);
-          if (caixasAtacado < 5) {
-            alert("A quantidade mínima para atacado é 5 caixas.");
-            return;
-          }
-          msg += `Quantidade de caixas: ${caixasAtacado}\n`;
-        }
+        msg += `Tipo de cliente: Atacado\n`;
+        msg += `Quantidade de caixas: ${caixasAtacado}\n`;
       }
 
       const url = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)}`;
       window.open(url, '_blank');
     });
   </script>
-
 </body>
 </html>
