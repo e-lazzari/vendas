@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulário de Pedido</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedido de Vinhos</title>
   <style>
     * {
       box-sizing: border-box;
@@ -16,12 +16,42 @@
       margin: 0;
     }
 
-    h2 {
+    h1, h2 {
       text-align: center;
       color: #333;
     }
 
+    .intro {
+      max-width: 600px;
+      margin: 0 auto 20px;
+      font-size: 16px;
+      color: #444;
+      text-align: center;
+    }
+
+    .escolha {
+      max-width: 500px;
+      margin: 0 auto 30px;
+      text-align: center;
+    }
+
+    .escolha button {
+      margin: 10px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+    }
+
+    .escolha button:hover {
+      background-color: #0056b3;
+    }
+
     form {
+      display: none;
       max-width: 500px;
       margin: 0 auto;
       background-color: white;
@@ -62,7 +92,7 @@
       display: none;
     }
 
-    button {
+    button.enviar {
       width: 100%;
       padding: 12px;
       background-color: #28a745;
@@ -73,7 +103,7 @@
       cursor: pointer;
     }
 
-    button:hover {
+    button.enviar:hover {
       background-color: #218838;
     }
 
@@ -86,20 +116,33 @@
         padding: 15px;
       }
 
-      h2 {
+      h1 {
         font-size: 22px;
       }
 
-      button {
-        font-size: 16px;
+      .intro {
+        font-size: 15px;
       }
     }
   </style>
 </head>
 <body>
 
-  <h2>Formulário de Pedido</h2>
+  <h1>Bem-vindo à nossa vinícola!</h1>
+  <div class="intro">
+    Temos vinhos de mesa de excelente qualidade.<br>
+    <strong>Pedido mínimo: 1 caixa (12 garrafas).</strong><br><br>
+    Escolha abaixo sua opção:
+  </div>
+
+  <div class="escolha">
+    <button onclick="escolher('consumidor')">Sou consumidor final</button>
+    <button onclick="escolher('atacado')">Quero comprar no atacado (5 caixas ou mais)</button>
+  </div>
+
   <form id="pedidoForm">
+    <input type="hidden" id="tipoCliente" name="tipoCliente" value="">
+
     <label>Nome:
       <input type="text" name="nome" required>
     </label>
@@ -133,42 +176,51 @@
     <div id="vinhosMistura" class="vinhos-mistura">
       <fieldset>
         <legend>Escolha a quantidade de cada tipo (múltiplos de 12)</legend>
-        <label>Vinho de Mesa Tinto Suave (R$15,00):
+        <label>Vinho Tinto Suave:
           <input type="number" name="tintoSuave" min="0" value="0">
         </label>
-        <label>Vinho de Mesa Tinto Seco (R$15,00):
+        <label>Vinho Tinto Seco:
           <input type="number" name="tintoSeco" min="0" value="0">
         </label>
-        <label>Vinho de Mesa Branco Suave (R$15,00):
+        <label>Vinho Branco Suave:
           <input type="number" name="brancoSuave" min="0" value="0">
         </label>
-        <label>Vinho de Mesa Branco Seco (R$15,00):
+        <label>Vinho Branco Seco:
           <input type="number" name="brancoSeco" min="0" value="0">
         </label>
       </fieldset>
     </div>
 
     <div id="caixasInteiras">
-      <label>Quantidade de caixas (12 unidades cada):
+      <label>Quantidade de caixas:
         <input type="number" name="caixas" min="1" value="1">
       </label>
     </div>
 
-    <button type="submit">Enviar pelo WhatsApp</button>
+    <button type="submit" class="enviar">Enviar pedido pelo WhatsApp</button>
   </form>
 
   <script>
     const misturarCheckbox = document.getElementById("misturar");
     const vinhosDiv = document.getElementById("vinhosMistura");
     const caixasDiv = document.getElementById("caixasInteiras");
+    const pedidoForm = document.getElementById("pedidoForm");
+    const tipoClienteInput = document.getElementById("tipoCliente");
 
     misturarCheckbox.addEventListener("change", function () {
       vinhosDiv.style.display = this.checked ? "block" : "none";
       caixasDiv.style.display = this.checked ? "none" : "block";
     });
 
-    document.getElementById("pedidoForm").addEventListener("submit", function(e) {
+    function escolher(tipo) {
+      tipoClienteInput.value = tipo;
+      pedidoForm.style.display = "block";
+      window.scrollTo({ top: pedidoForm.offsetTop, behavior: "smooth" });
+    }
+
+    pedidoForm.addEventListener("submit", function(e) {
       e.preventDefault();
+      const tipoCliente = tipoClienteInput.value;
       const nome = this.nome.value;
       const cpf = this.cpf.value;
       const cep = this.cep.value;
@@ -177,7 +229,8 @@
       const complemento = this.complemento.value;
       const numeroDestino = "555409798";
 
-      let msg = `Olá, meu nome é ${nome}, CPF: ${cpf}, CEP: ${cep}, Endereço: Bairro ${bairro}, Rua ${rua}, Complemento ${complemento}.\n`;
+      let msg = `Novo pedido (${tipoCliente === "atacado" ? "ATACADO" : "CONSUMIDOR FINAL"}):\n`;
+      msg += `Nome: ${nome}\nCPF: ${cpf}\nCEP: ${cep}\nBairro: ${bairro}\nRua: ${rua}\nComplemento: ${complemento}\n`;
 
       if (misturarCheckbox.checked) {
         const tintoSuave = parseInt(this.tintoSuave.value) || 0;
@@ -191,20 +244,16 @@
           return;
         }
 
-        msg += `Pedido com mistura de vinhos:\n`;
-        msg += `- Tinto Suave: ${tintoSuave}\n`;
-        msg += `- Tinto Seco: ${tintoSeco}\n`;
-        msg += `- Branco Suave: ${brancoSuave}\n`;
-        msg += `- Branco Seco: ${brancoSeco}\n`;
-        msg += `Total: ${total} garrafa(s)`;
+        msg += `Pedido com mistura:\n`;
+        msg += `- Tinto Suave: ${tintoSuave}\n- Tinto Seco: ${tintoSeco}\n- Branco Suave: ${brancoSuave}\n- Branco Seco: ${brancoSeco}\n`;
+        msg += `Total: ${total} garrafas\n`;
       } else {
         const caixas = parseInt(this.caixas.value);
         if (isNaN(caixas) || caixas < 1) {
-          alert("O pedido mínimo é de 1 caixa.");
+          alert("Pedido mínimo é de 1 caixa.");
           return;
         }
-        const total = caixas * 12;
-        msg += `Pedido de ${caixas} caixa(s), total de ${total} garrafa(s).`;
+        msg += `Pedido de ${caixas} caixa(s) (${caixas * 12} garrafas)\n`;
       }
 
       const url = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(msg)}`;
