@@ -72,11 +72,10 @@
     Pedido mínimo: 1 caixa (contém 12 garrafas).
   </div>
 
-  <div id="selecaoCliente" style="margin-bottom: 20px; display: flex; gap: 10px;">
-    <button type="button" id="btnConsumidor" style="flex:1;">Consumidor Final</button>
-    <button type="button" id="btnAtacado" style="flex:1;">Atacado (acima de 5 caixas)</button>
+  <div style="margin-bottom: 20px;">
+    <label><input type="radio" name="tipoCliente" value="consumidor" /> Consumidor Final</label>
+    <label><input type="radio" name="tipoCliente" value="atacado" /> Atacado (acima de 5 caixas)</label>
   </div>
-
 
   <form id="pedidoForm" style="display:none;">
 
@@ -159,38 +158,38 @@
   </form>
 
   <script>
-const btnConsumidor = document.getElementById('btnConsumidor');
-const btnAtacado = document.getElementById('btnAtacado');
+    const tipoClienteRadios = document.querySelectorAll('input[name="tipoCliente"]');
+    const pedidoForm = document.getElementById('pedidoForm');
+    const consumidorFinalDiv = document.getElementById('consumidorFinalDiv');
+    const atacadoDiv = document.getElementById('atacadoDiv');
+    const misturarCheckbox = document.getElementById('misturar');
+    const vinhosMistura = document.getElementById('vinhosMistura');
+    const tiposCaixasContainer = document.getElementById('tiposCaixasContainer');
+    let tipoClienteSelecionado = "";
 
-btnConsumidor.addEventListener('click', () => {
-  tipoClienteSelecionado = 'consumidor';
-  mostrarFormulario();
-});
+    tipoClienteRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        tipoClienteSelecionado = radio.value;
+        pedidoForm.style.display = 'block';
 
-btnAtacado.addEventListener('click', () => {
-  tipoClienteSelecionado = 'atacado';
-  mostrarFormulario();
-});
+        // Reset campos e visibilidade
+        consumidorFinalDiv.classList.add('hidden');
+        atacadoDiv.classList.add('hidden');
+        vinhosMistura.classList.add('hidden');
+        misturarCheckbox.checked = false;
+        tiposCaixasContainer.innerHTML = '';
+        pedidoForm.reset();
 
-function mostrarFormulario() {
-  pedidoForm.style.display = 'block';
+        if (tipoClienteSelecionado === 'consumidor') {
+          consumidorFinalDiv.classList.remove('hidden');
+        } else if (tipoClienteSelecionado === 'atacado') {
+          atacadoDiv.classList.remove('hidden');
+        }
 
-  consumidorFinalDiv.classList.add('hidden');
-  atacadoDiv.classList.add('hidden');
-  vinhosMistura.classList.add('hidden');
-  misturarCheckbox.checked = false;
-  tiposCaixasContainer.innerHTML = '';
-  pedidoForm.reset();
-
-  if (tipoClienteSelecionado === 'consumidor') {
-    consumidorFinalDiv.classList.remove('hidden');
-  } else if (tipoClienteSelecionado === 'atacado') {
-    atacadoDiv.classList.remove('hidden');
-  }
-
-  pedidoForm.scrollIntoView({ behavior: 'smooth' });
-}
-
+        // Scroll para o formulário
+        pedidoForm.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
 
     // Controla criação dos selects dos tipos de vinho para consumidor final
     document.getElementById('qtdCaixas').addEventListener('change', function() {
@@ -205,10 +204,10 @@ function mostrarFormulario() {
         label.style.display = 'block';
         label.style.marginBottom = '8px';
 
-        label.textContent = `Tipo da caixa ${i}: `;
+        label.textContent = Tipo da caixa ${i}: ;
 
         const select = document.createElement('select');
-        select.name = `tipoCaixa${i}`;
+        select.name = tipoCaixa${i};
         select.required = true;
 
         const optionPadrao = document.createElement('option');
@@ -255,8 +254,8 @@ function mostrarFormulario() {
         return;
       }
 
-      let msg = `Novo pedido (${tipoClienteSelecionado === "atacado" ? "ATACADO" : "CONSUMIDOR FINAL"}):\n`;
-      msg += `Nome: ${nome}\nCPF: ${cpf}\nCEP: ${cep}\nBairro: ${bairro}\nRua: ${rua}\nComplemento: ${complemento}\n`;
+      let msg = Novo pedido (${tipoClienteSelecionado === "atacado" ? "ATACADO" : "CONSUMIDOR FINAL"}):\n;
+      msg += Nome: ${nome}\nCPF: ${cpf}\nCEP: ${cep}\nBairro: ${bairro}\nRua: ${rua}\nComplemento: ${complemento}\n;
 
       if (tipoClienteSelecionado === 'consumidor') {
         const qtdCaixas = parseInt(this.qtdCaixas.value);
@@ -264,15 +263,15 @@ function mostrarFormulario() {
           alert("Por favor, selecione a quantidade de caixas entre 1 e 5.");
           return;
         }
-        msg += `Quantidade de caixas: ${qtdCaixas}\n`;
+        msg += Quantidade de caixas: ${qtdCaixas}\n;
 
         for(let i = 1; i <= qtdCaixas; i++) {
-          const tipoCaixa = this[`tipoCaixa${i}`].value;
+          const tipoCaixa = this[tipoCaixa${i}].value;
           if (!tipoCaixa) {
-            alert(`Por favor, selecione o tipo da caixa ${i}.`);
+            alert(Por favor, selecione o tipo da caixa ${i}.);
             return;
           }
-          msg += `Caixa ${i}: ${tipoCaixa}\n`;
+          msg += Caixa ${i}: ${tipoCaixa}\n;
         }
 
       } else if (tipoClienteSelecionado === 'atacado') {
@@ -288,11 +287,11 @@ function mostrarFormulario() {
             return;
           }
 
-          msg += `Quantidade total de caixas (misturadas): ${total}\n`;
-          msg += `- Vinho Tinto Suave: ${tintoSuave}\n`;
-          msg += `- Vinho Tinto Seco: ${tintoSeco}\n`;
-          msg += `- Vinho Branco Suave: ${brancoSuave}\n`;
-          msg += `- Vinho Branco Seco: ${brancoSeco}\n`;
+          msg += Quantidade total de caixas (misturadas): ${total}\n;
+          msg += - Vinho Tinto Suave: ${tintoSuave}\n;
+          msg += - Vinho Tinto Seco: ${tintoSeco}\n;
+          msg += - Vinho Branco Suave: ${brancoSuave}\n;
+          msg += - Vinho Branco Seco: ${brancoSeco}\n;
 
         } else {
           const caixasAtacado = parseInt(this.caixasAtacado.value);
@@ -300,11 +299,11 @@ function mostrarFormulario() {
             alert("A quantidade mínima para atacado é 5 caixas.");
             return;
           }
-          msg += `Quantidade de caixas: ${caixasAtacado}\n`;
+          msg += Quantidade de caixas: ${caixasAtacado}\n;
         }
       }
 
-      const url = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)}`;
+      const url = https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)};
       window.open(url, '_blank');
     });
   </script>
