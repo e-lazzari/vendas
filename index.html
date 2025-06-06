@@ -2,35 +2,26 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pedido de Vinho</title>
+  <title>Pedido de Vinhos</title>
   <style>
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-    .active {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .hidden {
-      display: none;
-    }
-    label, input {
-      display: block;
-      margin: 8px 0;
-    }
+    .hidden { display: none; }
+    button { margin: 5px; padding: 10px 20px; }
+    .selected { background-color: #4CAF50; color: white; }
   </style>
 </head>
 <body>
-  <h2>Escolha o tipo de cliente:</h2>
-  <button id="btnConsumidor">Consumidor Final</button>
-  <button id="btnAtacado">Atacado</button>
+  <h2>Faça seu pedido</h2>
 
-  <div id="formulario" class="hidden">
-    <div id="formConsumidor" class="hidden">
-      <label for="caixasConsumidor">Quantidade de caixas (mínimo 1):</label>
-      <input type="number" id="caixasConsumidor" min="1">
+  <div>
+    <button id="btnConsumidor">Consumidor Final</button>
+    <button id="btnAtacado">Atacado</button>
+  </div>
+
+  <form id="formulario">
+    <div id="opcaoConsumidor" class="hidden">
+      <label for="caixasConsumidor">Quantidade de caixas (mínimo 1, máximo 5):</label>
+      <input type="number" id="caixasConsumidor" min="1" max="5" required><br>
+
       <label for="tipoVinho">Tipo de vinho:</label>
       <select id="tipoVinho">
         <option value="Tinto Suave">Tinto Suave</option>
@@ -40,70 +31,72 @@
       </select>
     </div>
 
-    <div id="formAtacado" class="hidden">
+    <div id="opcaoAtacado" class="hidden">
       <p><strong>Informe a quantidade desejada de caixas (acima de 5) para compra em atacado para melhor conseguir te atender:</strong></p>
       <label for="caixasAtacado">Quantidade de caixas:</label>
-      <input type="number" id="caixasAtacado" min="5">
+      <input type="number" id="caixasAtacado" min="6" required><br>
     </div>
 
-    <button id="enviarWhatsApp">Enviar pelo WhatsApp</button>
-  </div>
+    <br>
+    <button type="submit">Enviar pelo WhatsApp</button>
+  </form>
 
   <script>
     const btnConsumidor = document.getElementById('btnConsumidor');
     const btnAtacado = document.getElementById('btnAtacado');
-    const formConsumidor = document.getElementById('formConsumidor');
-    const formAtacado = document.getElementById('formAtacado');
+    const opcaoConsumidor = document.getElementById('opcaoConsumidor');
+    const opcaoAtacado = document.getElementById('opcaoAtacado');
     const formulario = document.getElementById('formulario');
-    const enviarWhatsApp = document.getElementById('enviarWhatsApp');
 
-    let tipoCliente = "";
+    let tipoSelecionado = "";
 
     btnConsumidor.addEventListener('click', () => {
-      tipoCliente = "consumidor";
-      btnConsumidor.classList.add("active");
-      btnAtacado.classList.remove("active");
-      formulario.classList.remove("hidden");
-      formConsumidor.classList.remove("hidden");
-      formAtacado.classList.add("hidden");
+      tipoSelecionado = "consumidor";
+      btnConsumidor.classList.add('selected');
+      btnAtacado.classList.remove('selected');
+      opcaoConsumidor.classList.remove('hidden');
+      opcaoAtacado.classList.add('hidden');
     });
 
     btnAtacado.addEventListener('click', () => {
-      tipoCliente = "atacado";
-      btnAtacado.classList.add("active");
-      btnConsumidor.classList.remove("active");
-      formulario.classList.remove("hidden");
-      formAtacado.classList.remove("hidden");
-      formConsumidor.classList.add("hidden");
+      tipoSelecionado = "atacado";
+      btnAtacado.classList.add('selected');
+      btnConsumidor.classList.remove('selected');
+      opcaoAtacado.classList.remove('hidden');
+      opcaoConsumidor.classList.add('hidden');
     });
 
-    enviarWhatsApp.addEventListener('click', () => {
-      const numeroDestino = '5599999999999'; // Substitua pelo número correto
-      let msg = "Olá, gostaria de fazer um pedido de vinho!\n";
+    formulario.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-      if (tipoCliente === "consumidor") {
+      const numeroDestino = "5511999999999"; // Substitua pelo seu número do WhatsApp
+      let msg = "Olá! Gostaria de fazer um pedido de vinhos:\n";
+
+      if (tipoSelecionado === "consumidor") {
         const caixas = parseInt(document.getElementById('caixasConsumidor').value);
         const tipoVinho = document.getElementById('tipoVinho').value;
 
-        if (isNaN(caixas) || caixas < 1) {
-          alert("Para consumidor final, a quantidade mínima é 1 caixa.");
+        if (caixas < 1 || caixas > 5) {
+          alert("A quantidade para consumidor final deve ser entre 1 e 5 caixas.");
           return;
         }
 
-        msg += `Tipo de cliente: Consumidor Final\n`;
+        msg += `Tipo: Consumidor Final\n`;
         msg += `Quantidade de caixas: ${caixas}\n`;
         msg += `Tipo de vinho: ${tipoVinho}\n`;
 
-      } else if (tipoCliente === "atacado") {
+      } else if (tipoSelecionado === "atacado") {
         const caixasAtacado = parseInt(document.getElementById('caixasAtacado').value);
-
-        if (isNaN(caixasAtacado) || caixasAtacado < 5) {
-          alert("A quantidade mínima para atacado é 5 caixas.");
+        if (caixasAtacado < 6) {
+          alert("A quantidade mínima para atacado é 6 caixas.");
           return;
         }
 
-        msg += `Tipo de cliente: Atacado\n`;
+        msg += `Tipo: Atacado\n`;
         msg += `Quantidade de caixas: ${caixasAtacado}\n`;
+      } else {
+        alert("Por favor, selecione uma opção (Consumidor Final ou Atacado).");
+        return;
       }
 
       const url = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)}`;
